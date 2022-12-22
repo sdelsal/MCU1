@@ -1,0 +1,114 @@
+/*
+ * stm32f407xx_gpio_driver.c
+ *
+ *  Created on: Dec 22, 2022
+ *      Author: StefanoD
+ */
+#include "stm32f407xx_gpio_driver.h"
+
+// Clock setup
+void GPIO_PeriClockControl(GPIO_RegDef_t *pGPIOx, uint8_t EnorDi) {
+	if (EnorDi == ENABLE) {
+		     if (pGPIOx == GPIOA) { GPIOA_PCLCK_EN(); }
+		else if (pGPIOx == GPIOB) { GPIOB_PCLCK_EN(); }
+		else if (pGPIOx == GPIOC) { GPIOC_PCLCK_EN(); }
+		else if (pGPIOx == GPIOD) { GPIOD_PCLCK_EN(); }
+		else if (pGPIOx == GPIOE) { GPIOE_PCLCK_EN(); }
+		else if (pGPIOx == GPIOF) { GPIOF_PCLCK_EN(); }
+		else if (pGPIOx == GPIOG) { GPIOG_PCLCK_EN(); }
+		else if (pGPIOx == GPIOH) { GPIOH_PCLCK_EN(); }
+		else if (pGPIOx == GPIOI) { GPIOI_PCLCK_EN(); }
+	}
+	else {
+		     if (pGPIOx == GPIOA) { GPIOA_PCLCK_DI(); }
+		else if (pGPIOx == GPIOB) { GPIOB_PCLCK_DI(); }
+		else if (pGPIOx == GPIOC) { GPIOC_PCLCK_DI(); }
+		else if (pGPIOx == GPIOD) { GPIOD_PCLCK_DI(); }
+		else if (pGPIOx == GPIOE) { GPIOE_PCLCK_DI(); }
+		else if (pGPIOx == GPIOF) { GPIOF_PCLCK_DI(); }
+		else if (pGPIOx == GPIOG) { GPIOG_PCLCK_DI(); }
+		else if (pGPIOx == GPIOH) { GPIOH_PCLCK_DI(); }
+		else if (pGPIOx == GPIOI) { GPIOI_PCLCK_DI(); }
+	}
+}
+
+// Initialization
+void GPIO_Init(GPIO_Handle_t *pGPIOHandle) {
+
+	uint32_t temp = 0;
+	// Configure the mode of GPIO pin
+	if (pGPIOHandle->GPIO_PinCOnfig.GPIO_PinMode <= GPIO_MODE_ANALOG) {
+		temp = pGPIOHandle->GPIO_PinCOnfig.GPIO_PinMode << (2 * pGPIOHandle->GPIO_PinCOnfig.GPIO_PinNumber);
+		pGPIOHandle->pGPIOx->MODER &= ~(0x3 << (2 * pGPIOHandle->GPIO_PinCOnfig.GPIO_PinNumber)); //reset the 2 bits
+		pGPIOHandle->pGPIOx->MODER |= temp;
+	}
+	else {
+		// interrupt mode
+	}
+
+	temp = 0;
+	// Configure the speed
+    temp = pGPIOHandle->GPIO_PinCOnfig.GPIO_PinSpeed << (2 * pGPIOHandle->GPIO_PinCOnfig.GPIO_PinNumber);
+	pGPIOHandle->pGPIOx->OSPEEDR &= ~(0x3 << (2 * pGPIOHandle->GPIO_PinCOnfig.GPIO_PinNumber)); //reset the 2 bits
+	pGPIOHandle->pGPIOx->OSPEEDR |= temp;
+
+
+	temp = 0;
+	// Configure the pu pd
+    temp = pGPIOHandle->GPIO_PinCOnfig.GPIO_PinPuPdControl << (2 * pGPIOHandle->GPIO_PinCOnfig.GPIO_PinNumber);
+	pGPIOHandle->pGPIOx->PUPDR &= ~(0x3 << (2 * pGPIOHandle->GPIO_PinCOnfig.GPIO_PinNumber)); //reset the 2 bits
+	pGPIOHandle->pGPIOx->PUPDR |= temp;
+
+	temp = 0;
+	// Configure the output type
+    temp = pGPIOHandle->GPIO_PinCOnfig.GPIO_PinOPType << pGPIOHandle->GPIO_PinCOnfig.GPIO_PinNumber;
+	pGPIOHandle->pGPIOx->OTYPER &= ~(0x3 << pGPIOHandle->GPIO_PinCOnfig.GPIO_PinNumber); //reset the 2 bits
+	pGPIOHandle->pGPIOx->OTYPER |= temp;
+
+	temp = 0;
+	// Configure alt functionality
+	if (pGPIOHandle->GPIO_PinCOnfig.GPIO_PinMode == GPIO_MODE_ALTFN) {
+		uint8_t afr_hl_index   = pGPIOHandle->GPIO_PinCOnfig.GPIO_PinNumber % 8;
+		uint8_t afr_byte_index = pGPIOHandle->GPIO_PinCOnfig.GPIO_PinNumber / 8;
+
+		temp = pGPIOHandle->GPIO_PinCOnfig.GPIO_PinAltFunMode << (4 * afr_byte_index);
+		pGPIOHandle->pGPIOx->AFR[afr_hl_index] &= ~(0x3 << (4 * afr_byte_index)); //reset the 2 bits
+		pGPIOHandle->pGPIOx->AFR[afr_hl_index] |= temp;
+	}
+
+}
+
+void GPIO_DeInit(GPIO_RegDef_t *pGPIOx) {
+
+}
+
+// Data read and write
+uint8_t GPIO_ReadFromInputPin(GPIO_RegDef_t *pGPIOx, uint8_t PinNumber) {
+	return 0;
+}
+
+uint16_t GPIO_ReadFromInputPort(GPIO_RegDef_t *pGPIOx) {
+	return 0;
+}
+
+void GPIO_WriteToOutputPin(GPIO_RegDef_t *pGPIOx, uint8_t PinNumber, uint8_t Value) {
+
+}
+
+void GPIO_WriteToOutputPort(GPIO_RegDef_t *pGPIOx, uint8_t PinNumber, uint16_t Value) {
+
+}
+
+void GPIO_ToggleOutputPin(GPIO_RegDef_t *pGPIOx, uint8_t PinNumber) {
+
+}
+
+// IRQ configuration
+void GPIO_IRQCOnfig(uint8_t IRQNumber, uint8_t IRQPriority, uint8_t EnorDI) {
+
+}
+
+void GPIO_IRQHandlig(uint8_t PinNumber) {
+
+}
+
