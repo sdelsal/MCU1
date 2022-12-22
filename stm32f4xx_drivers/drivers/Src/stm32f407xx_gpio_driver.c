@@ -48,19 +48,19 @@ void GPIO_Init(GPIO_Handle_t *pGPIOHandle) {
 
 	temp = 0;
 	// Configure the speed
-    temp = pGPIOHandle->GPIO_PinCOnfig.GPIO_PinSpeed << (2 * pGPIOHandle->GPIO_PinCOnfig.GPIO_PinNumber);
+	temp = pGPIOHandle->GPIO_PinCOnfig.GPIO_PinSpeed << (2 * pGPIOHandle->GPIO_PinCOnfig.GPIO_PinNumber);
 	pGPIOHandle->pGPIOx->OSPEEDR &= ~(0x3 << (2 * pGPIOHandle->GPIO_PinCOnfig.GPIO_PinNumber)); // clearing
 	pGPIOHandle->pGPIOx->OSPEEDR |= temp;
 
 	temp = 0;
 	// Configure the pull up or pull down
-    temp = pGPIOHandle->GPIO_PinCOnfig.GPIO_PinPuPdControl << (2 * pGPIOHandle->GPIO_PinCOnfig.GPIO_PinNumber);
+	temp = pGPIOHandle->GPIO_PinCOnfig.GPIO_PinPuPdControl << (2 * pGPIOHandle->GPIO_PinCOnfig.GPIO_PinNumber);
 	pGPIOHandle->pGPIOx->PUPDR &= ~(0x3 << (2 * pGPIOHandle->GPIO_PinCOnfig.GPIO_PinNumber)); // clearing
 	pGPIOHandle->pGPIOx->PUPDR |= temp;
 
 	temp = 0;
 	// Configure the output type
-    temp = pGPIOHandle->GPIO_PinCOnfig.GPIO_PinOPType << pGPIOHandle->GPIO_PinCOnfig.GPIO_PinNumber;
+	temp = pGPIOHandle->GPIO_PinCOnfig.GPIO_PinOPType << pGPIOHandle->GPIO_PinCOnfig.GPIO_PinNumber;
 	pGPIOHandle->pGPIOx->OTYPER &= ~(0x1 << pGPIOHandle->GPIO_PinCOnfig.GPIO_PinNumber); // clearing
 	pGPIOHandle->pGPIOx->OTYPER |= temp;
 
